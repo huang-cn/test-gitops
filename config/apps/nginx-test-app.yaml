@@ -1,0 +1,23 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: nginx-test-app
+  namespace: openshift-gitops
+  annotations:
+    argocd.argoproj.io/sync-wave: "200"
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: nginx-test
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    path: config/apps/nginx-test
+    repoURL: https://github.com/huang-cn/test-gitops
+    targetRevision: HEAD
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
